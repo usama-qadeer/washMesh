@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">wash-mesh</string>
+    <string name="facebook_app_id">187799617345059</string>
+    <string name="facebook_client_token">e3dddc2187db003846549f7245617e18</string>
+    <string name="fb_login_protocol_scheme">fb187799617345059</string>
+</resources>
