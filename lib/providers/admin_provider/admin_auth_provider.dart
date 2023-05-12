@@ -104,43 +104,43 @@ class AdminAuthProvider extends ChangeNotifier {
     required dynamic name,
     required dynamic phone,
   }) async {
-    // try {
-    //   final UserCredential admin =
-    //       await firebaseAuth.createUserWithEmailAndPassword(
-    //     email: email,
-    //     password: password,
-    //   );
+    try {
+      final UserCredential admin =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    //   if (admin.user != null) {
-    //     Map adminData = {
-    //       'id': admin.user!.uid,
-    //       'vendorId': vendorId.toString(),
-    //       'name': name,
-    //       'email': email,
-    //       'phone': phone,
-    //     };
+      if (admin.user != null) {
+        Map adminData = {
+          'id': admin.user!.uid,
+          'vendorId': vendorId.toString(),
+          'name': name,
+          'email': email,
+          'phone': phone,
+        };
 
-    //     DatabaseReference adminRef =
-    //         FirebaseDatabase.instance.ref().child('vendor');
-    //     adminRef.child(admin.user!.uid).set(adminData);
-    //     currentAdmin = admin;
+        DatabaseReference adminRef =
+            FirebaseDatabase.instance.ref().child('vendor');
+        adminRef.child(admin.user!.uid).set(adminData);
+        currentAdmin = admin;
 
-    //     await FirebaseFirestore.instance
-    //         .collection('users')
-    //         .doc(admin.user!.uid)
-    //         .set({
-    //       'userId': admin.user!.uid,
-    //       'username': name,
-    //       'email': email,
-    //     });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(admin.user!.uid)
+            .set({
+          'userId': admin.user!.uid,
+          'username': name,
+          'email': email,
+        });
 
-    //     Fluttertoast.showToast(msg: 'Account has been created successfully.');
-    //   } else {
-    //     Fluttertoast.showToast(msg: 'Account has not been Created.');
-    //   }
-    // } catch (e) {
-    //   Fluttertoast.showToast(msg: e.toString());
-    // }
+        Fluttertoast.showToast(msg: 'Account has been created successfully.');
+      } else {
+        Fluttertoast.showToast(msg: 'Account has not been Created.');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
   }
 
   loginAdmin({
