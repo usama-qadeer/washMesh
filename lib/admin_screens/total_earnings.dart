@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wash_mesh/providers/admin_provider/admin_auth_provider.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
 import 'package:wash_mesh/widgets/custom_logo.dart';
-
+import 'package:shimmer/shimmer.dart';
 import '../models/admin_models/order_detail_model.dart';
 
 class TotalEarningsScreen extends StatefulWidget {
@@ -25,15 +25,31 @@ class _TotalEarningsScreenState extends State<TotalEarningsScreen> {
             builder: (context, snapshot) {
               return !snapshot.hasData || snapshot.data!.data!.data!.isEmpty
                   ? Center(
-                      heightFactor: 9.h,
-                      child: const Text(
-                        textAlign: TextAlign.center,
-                        'No earnings available\n Or\n wait for the process...',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.redAccent,
-                        ),
-                      ),
+                      heightFactor: 16.h,
+                      // child: const Text(
+                      //   textAlign: TextAlign.center,
+                      //   'Processing',
+                      //   style: TextStyle(
+                      //     fontSize: 20,
+                      //     color: Colors.redAccent,
+                      //   ),
+                      // ),
+                      child: Shimmer.fromColors(
+                          // direction: Duration(milliseconds: 200),
+                          child: Center(
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              'No Earning Yet....',
+                              style: TextStyle(
+                                fontSize: 30,
+                                // fontFamily: "poppinsTextTheme",
+                                fontWeight: FontWeight.bold,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                          baseColor: Colors.redAccent,
+                          highlightColor: Colors.grey.shade300),
                     )
                   : snapshot.connectionState == ConnectionState.waiting
                       ? const Padding(

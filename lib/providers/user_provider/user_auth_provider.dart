@@ -13,22 +13,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wash_mesh/admin_screens/admin_login_form.dart';
 import 'package:wash_mesh/models/admin_models/admin_model.dart';
 import 'package:wash_mesh/models/user_models/orders_model.dart' as or;
 import 'package:wash_mesh/models/user_models/place_order_model.dart';
 import 'package:wash_mesh/models/user_models/vendor_accepted_order.dart' as vc;
+import 'package:wash_mesh/user_screens/check_otp.dart';
 import 'package:wash_mesh/user_screens/send_otp.dart';
 import 'package:wash_mesh/user_screens/user_login_form.dart';
 import 'package:wash_mesh/user_screens/user_registration_form.dart';
 
 import '../../models/user_models/mesh_categories_model.dart' as um;
 import '../../models/user_models/user_model.dart' as u;
-import '../../models/user_models/user_model.dart';
 import '../../models/user_models/wash_categories_model.dart' as um;
 import '../../models/user_models/wash_categories_model.dart';
 import '../../user_map_integration/user_global_variables/user_global_variables.dart';
 import '../../user_map_integration/user_notifications/user_push_notifications.dart';
-import '../../user_screens/user_home_otp.dart';
 import '../../user_screens/user_social_profile.dart';
 import '../../widgets/custom_navigation_bar.dart';
 
@@ -75,20 +75,35 @@ class UserAuthProvider extends ChangeNotifier {
       // await otpCode(userData.phone, context);
 
       Fluttertoast.showToast(msg: result);
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => SendOTP(
-            userModel: UserModel(),
-          ),
-
-          //  UserHomeOTP(
-          //   phone: userData.phone,
-          // ),
-        ),
+      print("=======+${userData.phone}");
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: "+${userData.phone}",
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {
+          SendOTP.verify = verificationId;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyVerify(),
+              ));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
       );
+
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => SendOTP(
+      //       userModel: UserModel(),
+      //     ),
+
+      //     //  UserHomeOTP(
+      //     //   phone: userData.phone,
+      //     // ),
+      //   ),
+      // );
     } else {
-      print("8888 ${response.statusCode}");
+      print("9999 ${response.statusCode}");
 
       String? email = jsonDecode(response.body)['error'];
 
@@ -553,7 +568,11 @@ class UserAuthProvider extends ChangeNotifier {
           newPassword: newPassword, token: "${decode['token']}");
 
       print(response.statusCode);
+      FirebaseAuth auth = FirebaseAuth.instance;
 
+      String upPassword = newPassword;
+      print("lllllll${upPassword}");
+      await auth.currentUser!.updatePassword(upPassword);
       return jsonDecode(response.body)['message'];
     } else {
       print("hhhhh ${response.statusCode}");

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -251,18 +252,17 @@ class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
             referralCode: code.text,
             vendorDetails: vendorDetails,
           );
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AdminSendOTP(),
-              ));
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => AdminSendOTP(),
+          //     ));
           await adminData.registerAdmin(vendor, context);
         } else {
           setState(() {
             isLoading = false;
           });
-          return ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Upload Required Images.")));
+          return Fluttertoast.showToast(msg: "Upload Required Image. ");
         }
       }
     } catch (e) {
@@ -363,13 +363,14 @@ class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
                       CustomTextField(
                         hint: 'phoneNo'.tr(),
                         keyboardType: TextInputType.phone,
+                        maxLength: 12,
                         suffixIcon: const Icon(
                           Icons.star,
                           size: 20,
                         ),
                         controller: phoneNo,
                         validator: (value) {
-                          if (value!.isEmpty) {
+                          if (value!.isEmpty || value.length < 12) {
                             return 'Please enter your valid number starting from 92';
                           }
                           return null;

@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wash_mesh/admin_screens/admin_registration_form.dart';
+import 'package:wash_mesh/admin_screens/disable_user.dart';
 import 'package:wash_mesh/models/admin_models/admin_model.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
 import 'package:wash_mesh/widgets/custom_button.dart';
@@ -36,19 +37,20 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
 
   onSubmit() async {
     setState(() {
-      isLoading = true;
+      isLoading == true;
     });
     final adminData = Provider.of<AdminAuthProvider>(context, listen: false);
     try {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
         await adminData.loginAdmin(
+          context,
           input: phoneNo.text.trim(),
           password: password.text.trim(),
           fcmToken: '',
         );
 
-        await login();
+        bool check = await login();
 
         AdminPushNotifications pushNotifications = AdminPushNotifications();
         await pushNotifications.generateToken();
@@ -69,6 +71,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
         }
 
         final result = await adminData.loginAdmin(
+          context,
           input: phoneNo.text.trim(),
           password: password.text.trim(),
           fcmToken: fcmToken,
@@ -79,12 +82,16 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
         //     content: Text('$result'),
         //   ),
         // );
-
-        if (result == 'Service Provider Logged in Successfully!') {
+        print("5555 $result");
+        if (result["message"] == 'Service Provider Logged in Successfully!' &&
+            result["status"] == "1" &&
+            check == true) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString("loginPhone", phoneNo.text);
           prefs.setString("loginPassword", password.text);
-
+          prefs.setBool('adminLoggedIn', true);
+          Fluttertoast.showToast(
+              msg: 'Service Provider Logged in Successfully!');
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const CustomNavigationBarAdmin(),
@@ -92,7 +99,17 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
             (route) => false,
           );
           setState(() {});
-          isLoading = false;
+          isLoading == false;
+        } else if (result["message"] ==
+                'Service Provider Logged in Successfully!' &&
+            result["status"] == "2") {
+          setState(() {});
+          isLoading == false;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DisableUser(),
+              ));
         } else {
           Fluttertoast.showToast(msg: 'Login Failed, Check your credentials.');
           Navigator.of(context).pushReplacement(
@@ -106,7 +123,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
       return e.toString();
     }
     setState(() {
-      isLoading = false;
+      isLoading == false;
     });
   }
 
@@ -121,7 +138,8 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
         email: email.toString().trim(),
         password: password.text.trim(),
       );
-
+      print("444 ${admin.user!.uid}");
+// await admin.user!.updatePassword(newPassword);
       if (admin.user != null) {
         DatabaseReference userRef =
             FirebaseDatabase.instance.ref().child('vendor');
@@ -132,22 +150,26 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
           } else {
             Fluttertoast.showToast(msg: 'No record exist with this email.');
             setState(() {
-              isLoading = false;
+              isLoading == true;
             });
           }
         });
+
+        return true;
       } else {
         Fluttertoast.showToast(msg: 'Login Failed, Check your credentials.');
         setState(() {
-          isLoading = false;
+          isLoading == false;
         });
+        return false;
       }
     } catch (e) {
       print(e);
-      // Fluttertoast.showToast(msg: e.toString());
+      //  Fluttertoast.showToast(msg: e.toString());
       setState(() {
-        isLoading = false;
+        isLoading == false;
       });
+      return false;
     }
   }
 

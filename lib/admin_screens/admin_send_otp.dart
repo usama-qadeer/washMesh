@@ -2,20 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wash_mesh/admin_screens/admin_check_otp.dart';
-import 'package:wash_mesh/user_screens/check_otp.dart';
+import 'package:wash_mesh/models/admin_models/admin_model.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
-import 'package:wash_mesh/widgets/custom_logo.dart';
 
 import '../widgets/custom_colors.dart';
 
 class AdminSendOTP extends StatefulWidget {
-  late var userModelValue;
+  // late var userModelValue;
+  String? phone;
   //AdminModel() model = AdminModel()
 
-  AdminSendOTP({
-    Key? key,
-    this.userModelValue,
-  }) : super(key: key);
+  AdminSendOTP(
+      {Key? key,
+      // this.userModelValue,
+      this.phone})
+      : super(key: key);
 
   static String verify = "";
   @override
@@ -136,7 +137,9 @@ class _AdminSendOTPState extends State<AdminSendOTP> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => AdminOTPVerify(),
+                                  builder: (context) => AdminOTPVerify(
+                                    phone: widget.phone,
+                                  ),
                                 ));
                           },
                           codeAutoRetrievalTimeout: (String verificationId) {},

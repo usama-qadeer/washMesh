@@ -1,15 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wash_mesh/models/user_models/user_model.dart';
+import 'package:wash_mesh/user_map_integration/user_global_variables/user_global_variables.dart';
 import 'package:wash_mesh/user_screens/user_otp_screen.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
 import 'package:wash_mesh/widgets/custom_button.dart';
 import 'package:wash_mesh/widgets/custom_logo.dart';
 
 class UserForgetPassword extends StatefulWidget {
-  const UserForgetPassword({Key? key}) : super(key: key);
+  UserForgetPassword({Key? key}) : super(key: key);
   static String verify = '';
-
   @override
   State<UserForgetPassword> createState() => _UserForgetPasswordState();
 }
@@ -19,28 +21,34 @@ class _UserForgetPasswordState extends State<UserForgetPassword> {
   TextEditingController viaPhone = TextEditingController();
   TextEditingController phoneCode = TextEditingController();
 
-  Future otpCode() async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneCode.text + viaPhone.text,
-      verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
-      codeSent: (String verificationId, int? resendToken) {
-        UserForgetPassword.verify = verificationId;
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) =>
-                UserOtpScreen(input: phoneCode.text + viaPhone.text),
-          ),
-        );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+  Future otpCode(userData) async {
+    if (viaPhone.text == userData.phone) {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneCode.text + viaPhone.text,
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {
+          UserForgetPassword.verify = verificationId;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  UserOtpScreen(input: phoneCode.text + viaPhone.text),
+            ),
+          );
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } else {
+      Fluttertoast.showToast(msg: "Please Enter Your Register No.");
+    }
   }
 
   @override
   void initState() {
     super.initState();
     phoneCode.text = '+92';
+    // var u = UserModel().data!.user;
+    // print("gggg${u}");
   }
 
   @override
@@ -76,6 +84,9 @@ class _UserForgetPasswordState extends State<UserForgetPassword> {
                           Expanded(
                             flex: 1,
                             child: TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {}
+                              },
                               controller: phoneCode,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(

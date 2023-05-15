@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:wash_mesh/admin_screens/admin_otp_screen.dart';
+import 'package:wash_mesh/admin_screens/total_bookings.dart';
+import 'package:wash_mesh/admin_screens/total_earnings.dart';
 // import 'package:wash_mesh/admin_screens/admin_home_screen.dart';
 // import 'package:wash_mesh/admin_screens/admin_registration_form.dart';
 import 'package:wash_mesh/providers/admin_provider/admin_auth_provider.dart';
@@ -14,13 +17,12 @@ import 'package:wash_mesh/providers/user_provider/user_info_provider.dart';
 // import 'package:wash_mesh/slider/controller.dart';
 // import 'package:wash_mesh/slider/slider_home.dart';
 import 'package:wash_mesh/splash_screen.dart';
-import 'package:wash_mesh/user_screens/check_otp.dart';
-import 'package:wash_mesh/user_screens/get_otp.dart';
+import 'package:wash_mesh/user_screens/accepted_orders_screen.dart';
 import 'package:wash_mesh/user_screens/prefrence.dart';
-import 'package:wash_mesh/user_screens/register_user_usama.dart';
-import 'package:wash_mesh/user_screens/send_otp.dart';
 
-import 'admin_screens/admin_home_screen.dart';
+import 'admin_screens/admin_accepted_order_screen.dart';
+import 'admin_screens/admin_check_otp.dart';
+import 'admin_screens/admin_orders_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {

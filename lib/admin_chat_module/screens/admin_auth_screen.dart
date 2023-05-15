@@ -34,6 +34,7 @@ class _AdminAuthScreenState extends State<AdminAuthScreen> {
           email: email,
           password: password,
         );
+        //  await userCredential.user!.updatePassword(newPassword);
       } else {
         final userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,

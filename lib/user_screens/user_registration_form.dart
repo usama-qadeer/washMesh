@@ -246,6 +246,7 @@ class _UserRegistrationFormState extends State<UserRegistrationForm> {
                                 flex: 5,
                                 child: TextFormField(
                                   controller: viaPhone,
+                                  maxLength: 12,
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
                                     suffixIcon: const Icon(
@@ -267,8 +268,8 @@ class _UserRegistrationFormState extends State<UserRegistrationForm> {
                                     filled: true,
                                   ),
                                   validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter your phone number';
+                                    if (value!.isEmpty && value.length < 12) {
+                                      return 'Please enter your valid phone number';
                                     }
                                     return null;
                                   },

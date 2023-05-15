@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:wash_mesh/models/user_models/vendor_accepted_order.dart';
 import 'package:wash_mesh/user_map_integration/screens/main_screen.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
@@ -36,15 +37,30 @@ class _AcceptedOrdersScreenState extends State<AcceptedOrdersScreen> {
               UserAuthProvider.getAcceptedVendorOrder(widget.acceptedOrderId),
           builder: (context, snapshot) {
             return snapshot.hasData && snapshot.data!.data == null
-                ? const Center(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      'Processing please wait...',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.redAccent,
-                      ),
-                    ),
+                ? Center(
+                    // child: Text(
+                    //   textAlign: TextAlign.center,
+                    //   'Processing please wait...',
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     color: Colors.redAccent,
+                    //   ),
+                    // ),
+                    child: Shimmer.fromColors(
+                        // direction: Duration(milliseconds: 200),
+                        child: Center(
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            'Processing...',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                        baseColor: Colors.redAccent,
+                        highlightColor: Colors.grey.shade300),
                   )
                 : snapshot.connectionState == ConnectionState.waiting
                     ? const Center(

@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:wash_mesh/admin_screens/admin_update_services.dart';
 import 'package:wash_mesh/admin_screens/today_services.dart';
 import 'package:wash_mesh/admin_screens/total_bookings.dart';
@@ -221,15 +222,30 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           future: adminData.getAdminData(),
           builder: (context, snapshot) {
             return !snapshot.hasData && snapshot.data == null
-                ? const Center(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      'Processing...',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.redAccent,
-                      ),
-                    ),
+                ? Center(
+                    // child: Text(
+                    //   textAlign: TextAlign.center,
+                    //   'Processing...',
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     color: Colors.redAccent,
+                    //   ),
+                    // ),
+                    child: Shimmer.fromColors(
+                        // direction: Duration(milliseconds: 200),
+                        child: Center(
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            'Processing...',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                        baseColor: Colors.redAccent,
+                        highlightColor: Colors.grey.shade300),
                   )
                 : SingleChildScrollView(
                     child: Padding(

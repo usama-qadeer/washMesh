@@ -237,9 +237,8 @@ class _UserSettingsState extends State<UserSettings> {
 
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  prefs.remove('userToken');
-                  prefs.setBool('userLoggedIn', false);
-
+                  await prefs.remove('userToken');
+                  await prefs.setBool('userLoggedIn', false);
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                       builder: (context) => const RegisterScreen(),

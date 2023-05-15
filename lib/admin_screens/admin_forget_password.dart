@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wash_mesh/admin_screens/admin_otp_screen.dart';
 import 'package:wash_mesh/models/admin_models/admin_model.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
@@ -16,11 +17,12 @@ class AdminForgetPassword extends StatefulWidget {
   State<AdminForgetPassword> createState() => _AdminForgetPasswordState();
 }
 
+//SharedPreferences preference = SharedPreferences.getInstance();
 class _AdminForgetPasswordState extends State<AdminForgetPassword> {
   final formKey = GlobalKey<FormFieldState>();
   TextEditingController viaPhone = TextEditingController();
   TextEditingController phoneCode = TextEditingController();
-
+  bool isLoading = false;
   otpCode() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneCode.text + viaPhone.text,
@@ -36,6 +38,9 @@ class _AdminForgetPasswordState extends State<AdminForgetPassword> {
             ),
           ),
         );
+        setState(() {
+          isLoading == true;
+        });
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -102,6 +107,14 @@ class _AdminForgetPasswordState extends State<AdminForgetPassword> {
                           flex: 5,
                           child: TextFormField(
                             controller: viaPhone,
+                            // maxLength: 10,
+                            // maxLines: 10,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Please Enter Your Register No";
+                              } else
+                                return null;
+                            },
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
                               hintText: '3331234567',
@@ -118,12 +131,6 @@ class _AdminForgetPasswordState extends State<AdminForgetPassword> {
                               fillColor: Colors.white,
                               filled: true,
                             ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your phone number';
-                              }
-                              return null;
-                            },
                           ),
                         ),
                       ],

@@ -3,12 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wash_mesh/widgets/custom_colors.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton(
-      {required this.onTextPress, required this.buttonText, super.key});
+  CustomButton(
+      {required this.onTextPress,
+      required this.buttonText,
+      // this.isLoading,
+      super.key});
 
   final dynamic onTextPress;
   final String buttonText;
 
+  ///bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

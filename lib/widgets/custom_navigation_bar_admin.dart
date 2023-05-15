@@ -41,6 +41,7 @@ class _CustomNavigationBarAdminState extends State<CustomNavigationBarAdmin> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: Colors.transparent,
           index: currentIndex,
           animationDuration: const Duration(milliseconds: 300),
           onTap: onTap,

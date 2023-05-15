@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wash_mesh/admin_screens/admin_login_form.dart';
 import 'package:wash_mesh/admin_screens/admin_registration_form.dart';
-import 'package:wash_mesh/admin_screens/admin_services.dart';
 import 'package:wash_mesh/models/admin_models/order_detail_model.dart';
 import 'package:wash_mesh/models/admin_models/vendor_applied.dart';
 import 'package:wash_mesh/models/admin_models/vendor_orders.dart';
@@ -17,6 +16,8 @@ import 'package:wash_mesh/models/admin_models/wash_category_model.dart';
 import 'package:wash_mesh/models/single_order_detail_model.dart';
 
 import '../../admin_map_integration/admin_global_variables/admin_global_variables.dart';
+import '../../admin_screens/admin_check_otp.dart';
+import '../../admin_screens/admin_send_otp.dart';
 import '../../models/admin_models/admin_model.dart';
 
 class AdminAuthProvider extends ChangeNotifier {
@@ -70,14 +71,35 @@ class AdminAuthProvider extends ChangeNotifier {
         phone: adminData.phone,
       );
 
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: "+${adminData.phone}",
+        verificationCompleted: (PhoneAuthCredential credential) {},
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {
+          AdminSendOTP.verify = verificationId;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminOTPVerify(
+                  // adminData: Vendor().phone,
+                  phone: Vendor().phone,
+                  token: token,
+                  adminData: Vendor().phone,
+                ),
+              ));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString("adminPhone", adminData.phone);
       Fluttertoast.showToast(msg: result);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              AdminServices(token: token, phone: adminData.phone),
-        ),
-      );
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) =>
+      //         AdminServices(token: token, phone: adminData.phone),
+      //   ),
+      // );
       print("111111${response.body}");
       print("2222222${response.statusCode}");
     } else {
@@ -143,7 +165,8 @@ class AdminAuthProvider extends ChangeNotifier {
     }
   }
 
-  loginAdmin({
+  loginAdmin(
+    BuildContext context, {
     var input,
     var password,
     var fcmToken,
@@ -159,13 +182,18 @@ class AdminAuthProvider extends ChangeNotifier {
         prefs.setString('token', jsonDecode(response.body)['data']['token']);
         prefs.setString('email',
             jsonDecode(response.body)['data']['Vendor']['email'].toString());
-        prefs.setBool('adminLoggedIn', true);
+
+        print("pkpk ${jsonDecode(response.body)['data']['Vendor']['status']}");
+
         prefs.setString('adminPersonalInfo', response.body);
       }
       print("rrrrrrrr ${response.body}");
-      print("ssssss${response.statusCode}");
+      print("ssssss${jsonDecode(response.body)['message']}");
       print(fcmToken);
-      return jsonDecode(response.body)['message'];
+      return {
+        "message": jsonDecode(response.body)['message'],
+        "status": "${jsonDecode(response.body)['data']['Vendor']['status']}"
+      };
     } else {
       print(fcmToken);
       print("eeeeeeeeeee ${response.body}");
@@ -226,14 +254,19 @@ class AdminAuthProvider extends ChangeNotifier {
         ntoken: "${decode['token']}",
       );
       Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AdminLoginForm(),
-              ))
-          .whenComplete(() =>
-              FirebaseAuth.instance.currentUser?.updatePassword(newPassword));
-
+          context,
+          MaterialPageRoute(
+            builder: (context) => AdminLoginForm(),
+          ));
+      // FirebaseAuth.instance.currentUser!.updatePassword(newPassword);
       // print("rrrrrrrrrrrrr ${response.statusCode}");
+      FirebaseAuth auth = FirebaseAuth.instance;
+
+      String upPassword = newPassword;
+      print("lllllll${upPassword}");
+      await auth.currentUser!.updatePassword(upPassword);
+
+
       return jsonDecode(response.body)['message'];
     } else {
       print("hhhhh ${response.statusCode}");

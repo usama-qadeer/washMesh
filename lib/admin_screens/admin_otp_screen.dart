@@ -3,7 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wash_mesh/admin_screens/admin_forget_password.dart';
 import 'package:wash_mesh/admin_screens/admin_recreate_password.dart';
 import 'package:wash_mesh/models/admin_models/admin_model.dart';
@@ -23,8 +25,9 @@ class AdminOtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<AdminOtpScreen> {
   var smsCode = '';
   bool isLoading = false;
+  bool resend = true;
   otpVerify() async {
-    isLoading = true;
+    isLoading == true;
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -41,13 +44,28 @@ class _OtpScreenState extends State<AdminOtpScreen> {
         ),
       );
       setState(() {
-        isLoading = true;
+        isLoading == true;
       });
     } catch (e) {
-      return ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+      return Fluttertoast.showToast(msg: e.toString());
     }
-    isLoading = false;
+    isLoading == false;
+  }
+
+  resendOTP() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var adminPhone = preferences.getString("adminPhone");
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: "+${adminPhone}",
+      verificationCompleted: (PhoneAuthCredential credential) {},
+      verificationFailed: (FirebaseAuthException e) {
+        Fluttertoast.showToast(msg: e.toString());
+      },
+      codeSent: (String verificationId, int? resendToken) {},
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+    print("aaaaaa${adminPhone}");
   }
 
   @override
@@ -93,6 +111,7 @@ class _OtpScreenState extends State<AdminOtpScreen> {
                   ),
                 ),
               ),
+
               SizedBox(height: 15.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -113,6 +132,23 @@ class _OtpScreenState extends State<AdminOtpScreen> {
                 ],
               ),
               SizedBox(height: 25.h),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                // Future.delayed(Duration)
+                Visibility(
+                  visible: resend,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        resend = false;
+                      });
+                      resendOTP();
+                      // print(adminPhone);
+                      //   print("ggggg${AdminModel().data!.vendor!.phone}");
+                    },
+                    child: Text("Resend OTP"),
+                  ),
+                ),
+              ]),
               // Text(
               //   'Resend Within 45s',
               //   style: TextStyle(

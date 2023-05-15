@@ -232,8 +232,6 @@ class _AdminSettingsState extends State<AdminSettings> {
               SizedBox(height: 70.h),
               InkWell(
                 onTap: () async {
-                  Geofire.removeLocation(
-                      FirebaseAuth.instance.currentUser!.uid);
                   isDriverActive = false;
 
                   await FirebaseAuthMethods(FirebaseAuth.instance)
@@ -244,14 +242,12 @@ class _AdminSettingsState extends State<AdminSettings> {
 
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  prefs.remove('token');
-                  prefs.setBool('adminLoggedIn', false);
-
-                  Navigator.of(context).pushAndRemoveUntil(
+                  await prefs.remove('token');
+                  await prefs.setBool('adminLoggedIn', false);
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const RegisterScreen(),
                     ),
-                    (route) => false,
                   );
                 },
                 child: Text(
