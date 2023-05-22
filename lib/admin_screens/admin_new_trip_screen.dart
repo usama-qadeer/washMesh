@@ -694,6 +694,7 @@ class _AdminNewTripScreenState extends State<AdminNewTripScreen> {
                     ),
                     const SizedBox(height: 12),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           widget.rideRequestModel.userName!,
@@ -710,6 +711,10 @@ class _AdminNewTripScreenState extends State<AdminNewTripScreen> {
                             color: Colors.blue,
                           ),
                         ),
+                        ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.chat_bubble),
+                            label: Text("Chat"))
                       ],
                     ),
                     const SizedBox(height: 18),

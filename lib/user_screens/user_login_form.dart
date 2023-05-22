@@ -313,7 +313,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wash_mesh/models/user_models/user_model.dart';
 import 'package:wash_mesh/user_screens/user_forget_password.dart';
 import 'package:wash_mesh/user_screens/user_home_screen.dart';
 import 'package:wash_mesh/user_screens/user_registration_form.dart';
@@ -351,6 +350,9 @@ class _UserLoginFormState extends State<UserLoginForm> {
       isLoading = true;
     });
     final userData = Provider.of<UserAuthProvider>(context, listen: false);
+    UserPushNotifications userNotifications = UserPushNotifications();
+    String token = await userNotifications.getToken();
+    print("tukr1111 $token");
     try {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
@@ -395,6 +397,7 @@ class _UserLoginFormState extends State<UserLoginForm> {
           setState(() {
             isLoading = false;
           });
+          print("9999999999${userData}");
         } else {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
@@ -421,7 +424,7 @@ class _UserLoginFormState extends State<UserLoginForm> {
       );
 
       if (user.user != null) {
-        UserAssistantMethods.readCurrentOnlineUserInfo();
+        await UserAssistantMethods.readCurrentOnlineUserInfo();
 
         DatabaseReference userRef =
             FirebaseDatabase.instance.ref().child('users');
@@ -576,10 +579,14 @@ class _UserLoginFormState extends State<UserLoginForm> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await Provider.of<UserAuthProvider>(context,
-                                  listen: false)
-                              .signInWithGoogle(context);
-
+                          await Provider.of<UserAuthProvider>(
+                            context,
+                            listen: false,
+                          ).signInWithGoogle(context);
+                          UserPushNotifications userNotifications =
+                              UserPushNotifications();
+                          String token = await userNotifications.getToken();
+                          print("tukr333 $token");
                           // await Provider.of<UserAuthProvider>(context,
                           //         listen: false)
                           //     .loginSocialUser(context);
@@ -593,7 +600,10 @@ class _UserLoginFormState extends State<UserLoginForm> {
                           await Provider.of<UserAuthProvider>(context,
                                   listen: false)
                               .loginFb();
-
+                          UserPushNotifications userNotifications =
+                              UserPushNotifications();
+                          String token = await userNotifications.getToken();
+                          print("tukr444 $token");
                           // await Provider.of<UserAuthProvider>(context,
                           //         listen: false)
                           //     .loginSocialFacebook();

@@ -112,7 +112,8 @@ class Attribute {
         attributeValue!.add(AttributeValue.fromJson(v));
       });
     }
-    print("sssssss$rate");
+    //Category Price
+    // print("sssssss$rate");
   }
 
   Map<String, dynamic> toJson() {

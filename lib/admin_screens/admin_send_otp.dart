@@ -138,6 +138,7 @@ class _AdminSendOTPState extends State<AdminSendOTP> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => AdminOTPVerify(
+                                    adminData: Vendor().phone,
                                     phone: widget.phone,
                                   ),
                                 ));

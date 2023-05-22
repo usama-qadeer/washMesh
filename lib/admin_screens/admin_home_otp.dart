@@ -303,7 +303,7 @@ class _AdminHomeOTPState extends State<AdminHomeOTP>
               Countdown(
                 onTap: () {
                   startAgain();
-                  print("==================");
+                  // print("==================");
                 },
                 animation: StepTween(
                   begin: levelClock, // THIS IS A USER ENTERED NUMBER
@@ -353,11 +353,11 @@ class Countdown extends AnimatedWidget {
     String timerText =
         '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
 
-    print('animation.value  ${animation!.value} ');
-    print('inMinutes ${clockTimer.inMinutes.toString()}');
-    print('inSeconds ${clockTimer.inSeconds.toString()}');
-    print(
-        'inSeconds.remainder ${clockTimer.inSeconds.remainder(60).toString()}');
+    // print('animation.value  ${animation!.value} ');
+    // print('inMinutes ${clockTimer.inMinutes.toString()}');
+    // print('inSeconds ${clockTimer.inSeconds.toString()}');
+    // print(
+    //     'inSeconds.remainder ${clockTimer.inSeconds.remainder(60).toString()}');
     void resendOtp() {
       if (clockTimer.inSeconds == 0) {
         Text("");

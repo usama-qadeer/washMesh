@@ -8,14 +8,14 @@ class MapUserModel {
 
   MapUserModel({
     this.id,
-    this.name,
+    required this.name,
     this.email,
     this.phone,
   });
 
   MapUserModel.fromSnapshot(DataSnapshot snapshot) {
     id = (snapshot.value as dynamic)['id'].toString();
-    name = (snapshot.value as dynamic)['name'];
+    name = (snapshot.value as dynamic)['name'] ?? "";
     email = (snapshot.value as dynamic)['email'];
     phone = (snapshot.value as dynamic)['phone'];
   }

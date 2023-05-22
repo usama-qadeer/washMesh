@@ -32,8 +32,9 @@ class _ActiveDriversScreenState extends State<ActiveDriversScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Nearest Online Vendors',
+          'Nearest Online Service Provider',
           style: TextStyle(
+            fontSize: 15,
             color: Colors.white,
           ),
         ),

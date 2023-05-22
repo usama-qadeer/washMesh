@@ -41,7 +41,7 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
                         ),
                       );
                     },
-                    child: const Text('All User Orders'),
+                    child: const Text('All Customer Orders'),
                   ),
                 ),
                 // SizedBox(height: 16.h),

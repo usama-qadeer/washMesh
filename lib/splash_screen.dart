@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         userToken = prefs.getString('userToken');
         adminToken = prefs.getString('token');
-        print("6666 ${prefs.getBool('adminLoggedIn')}");
+        //   print("6666 ${prefs.getBool('adminLoggedIn')}");
         if (prefs.getBool('userLoggedIn') == true &&
             FirebaseAuth.instance.currentUser != null) {
           Navigator.pushAndRemoveUntil(

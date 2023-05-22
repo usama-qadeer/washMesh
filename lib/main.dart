@@ -5,24 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:wash_mesh/admin_screens/admin_otp_screen.dart';
-import 'package:wash_mesh/admin_screens/total_bookings.dart';
-import 'package:wash_mesh/admin_screens/total_earnings.dart';
-// import 'package:wash_mesh/admin_screens/admin_home_screen.dart';
-// import 'package:wash_mesh/admin_screens/admin_registration_form.dart';
 import 'package:wash_mesh/providers/admin_provider/admin_auth_provider.dart';
 import 'package:wash_mesh/providers/admin_provider/admin_info_provider.dart';
 import 'package:wash_mesh/providers/user_provider/user_auth_provider.dart';
 import 'package:wash_mesh/providers/user_provider/user_info_provider.dart';
-// import 'package:wash_mesh/slider/controller.dart';
-// import 'package:wash_mesh/slider/slider_home.dart';
 import 'package:wash_mesh/splash_screen.dart';
-import 'package:wash_mesh/user_screens/accepted_orders_screen.dart';
 import 'package:wash_mesh/user_screens/prefrence.dart';
 
-import 'admin_screens/admin_accepted_order_screen.dart';
-import 'admin_screens/admin_check_otp.dart';
-import 'admin_screens/admin_orders_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -79,18 +68,17 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         designSize: const Size(393, 852),
         builder: (context, _) => MaterialApp(
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          title: 'Wash Mesh',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            textTheme: GoogleFonts.poppinsTextTheme(
-              Theme.of(context).textTheme,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            title: 'WashMesh',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              textTheme: GoogleFonts.poppinsTextTheme(
+                Theme.of(context).textTheme,
+              ),
             ),
-          ),
-          home: SplashScreen(),
-        ),
+            home: SplashScreen()),
       ),
     );
   }

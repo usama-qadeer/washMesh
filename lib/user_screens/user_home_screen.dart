@@ -62,9 +62,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body) as Map<String, dynamic>;
       var firstN = json['data']['User']['first_name'];
-      setState(() {
-        firstName = firstN;
-      });
+
+      void setState(fn) {
+        if (mounted) {
+          firstName = firstN;
+          super.setState(fn);
+        }
+      }
+
+      // setState(() {
+      //   firstName = firstN;
+      // });
     }
   }
 
@@ -152,6 +160,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   void initState() {
+    GoogleMap(
+      initialCameraPosition: _kGooglePlex,
+    );
     super.initState();
     getUserData();
     // allowLocationPermission();

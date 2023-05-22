@@ -104,7 +104,7 @@ class _AdminProfileState extends State<AdminProfile> {
         }
       }
     } catch (e) {
-      rethrow;
+      return Fluttertoast.showToast(msg: e.toString());
     }
   }
 

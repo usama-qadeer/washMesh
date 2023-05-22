@@ -26,7 +26,7 @@ class _TodayServicesScreenState extends State<TodayServicesScreen> {
             builder: (context, snapshot) {
               return !snapshot.hasData || snapshot.data!.data!.data!.isEmpty
                   ? Center(
-                      heightFactor: 17.h,
+                      heightFactor: 15.h,
                       // child: const Text(
                       //   textAlign: TextAlign.center,
                       //   'No services available\n Or\n wait for the process...',
@@ -97,40 +97,46 @@ class _TodayServicesScreenState extends State<TodayServicesScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              const Text("Amount :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).amount}",
-                                              ),
-                                              SizedBox(width: 5.h),
-                                              const Text("| Extra Charges :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).extraCharges}",
-                                              ),
-                                              SizedBox(width: 5.h),
-                                              const Text("| Total :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).total}",
-                                              ),
-                                            ],
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                const Text("Amount :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).amount}",
+                                                ),
+                                                SizedBox(width: 5.h),
+                                                const Text("| Extra Charges :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).extraCharges}",
+                                                ),
+                                                SizedBox(width: 5.h),
+                                                const Text("| Total :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).total}",
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           SizedBox(height: 5.h),
-                                          Row(
-                                            children: [
-                                              const Text("Description :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).description}",
-                                              ),
-                                              // SizedBox(width: 5.h),
-                                              // const Text("| Status :"),
-                                              // SizedBox(width: 5.h),
-                                              // const Text('Completed'),
-                                            ],
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                const Text("Description :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).description}",
+                                                ),
+                                                // SizedBox(width: 5.h),
+                                                // const Text("| Status :"),
+                                                // SizedBox(width: 5.h),
+                                                // const Text('Completed'),
+                                              ],
+                                            ),
                                           ),
                                           SizedBox(height: 5.h),
                                           Row(

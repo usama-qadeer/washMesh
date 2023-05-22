@@ -45,6 +45,7 @@ class _MeshBookScreenState extends State<MeshBookScreen> {
   int _catid = 0;
   int _att_id = 0;
   int _att_val = 0;
+  String? selectedVal;
   @override
   void initState() {
     // TODO: implement initState
@@ -213,7 +214,8 @@ class _MeshBookScreenState extends State<MeshBookScreen> {
                   borderRadius: BorderRadius.circular(32.r),
                 ),
                 child: DropdownButtonFormField<String>(
-                  value: carname,
+                  value: selectedVal,
+                  hint: Text("Please Select a Service"),
                   // hint: const Text(
                   //   'Gender',
                   //   style: TextStyle(color: Colors.grey),

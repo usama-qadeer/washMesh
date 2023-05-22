@@ -13,11 +13,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wash_mesh/admin_screens/admin_login_form.dart';
 import 'package:wash_mesh/models/admin_models/admin_model.dart';
+import 'package:wash_mesh/models/single_order_detail_model.dart';
 import 'package:wash_mesh/models/user_models/orders_model.dart' as or;
 import 'package:wash_mesh/models/user_models/place_order_model.dart';
 import 'package:wash_mesh/models/user_models/vendor_accepted_order.dart' as vc;
+import 'package:wash_mesh/stopwatch/countdown_screen.dart';
 import 'package:wash_mesh/user_screens/check_otp.dart';
 import 'package:wash_mesh/user_screens/send_otp.dart';
 import 'package:wash_mesh/user_screens/user_login_form.dart';
@@ -37,6 +38,7 @@ class UserAuthProvider extends ChangeNotifier {
   Map<String, dynamic>? _userData;
   AccessToken? _accessToken;
   bool _checking = true;
+  static String verify = "";
 
   // User Authentication Code:
 
@@ -63,6 +65,7 @@ class UserAuthProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       print("8888 ${response.statusCode}");
+      dynamic token = jsonDecode(response.body)['data']['token'];
       dynamic result = await jsonDecode(response.body)['message'];
 
       saveFormData(
@@ -73,9 +76,9 @@ class UserAuthProvider extends ChangeNotifier {
       );
 
       // await otpCode(userData.phone, context);
-
+      //  CountDownScreen();
       Fluttertoast.showToast(msg: result);
-      print("=======+${userData.phone}");
+      print("+${userData.phone}");
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: "+${userData.phone}",
         verificationCompleted: (PhoneAuthCredential credential) {},
@@ -85,12 +88,17 @@ class UserAuthProvider extends ChangeNotifier {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => MyVerify(),
+                builder: (context) => MyVerify(
+                  phone: userData.phone,
+                  token: token,
+                  //  userData: u.UserModel().data!.user!.phone,
+                ),
               ));
         },
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
-
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString("userPhone", "+${userData.phone}");
       // Navigator.of(context).pushReplacement(
       //   MaterialPageRoute(
       //     builder: (context) => SendOTP(
@@ -493,6 +501,8 @@ class UserAuthProvider extends ChangeNotifier {
         prefs.setString('userPersonalInfo', response.body);
       }
       print(response.body);
+      print(
+          "usama3333 ${jsonDecode(response.body)['data']['User']['fcm_token']}");
       return jsonDecode(response.body)['message'];
     } else {
       print(response.body);
@@ -575,7 +585,7 @@ class UserAuthProvider extends ChangeNotifier {
       await auth.currentUser!.updatePassword(upPassword);
       return jsonDecode(response.body)['message'];
     } else {
-      print("hhhhh ${response.statusCode}");
+      // print("hhhhh ${response.statusCode}");
       return 'Registration Failed';
     }
   }
@@ -632,7 +642,7 @@ class UserAuthProvider extends ChangeNotifier {
 
       return jsonDecode(response.body)['message'];
     } else {
-      print("hhhhh ${response.statusCode}");
+      // print("hhhhh ${response.statusCode}");
       return 'Registration Failed';
     }
   }
@@ -679,7 +689,7 @@ class UserAuthProvider extends ChangeNotifier {
       print(response.statusCode);
       return jsonDecode(response.body)['message'];
     } else {
-      print("hhhhh ${response.statusCode}");
+      // print("hhhhh ${response.statusCode}");
       return 'Registration Failed';
     }
   }
@@ -828,9 +838,17 @@ class UserAuthProvider extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
-
+      // debugPrint("tttttttt${token}");
+      /// debugPrint("999999999999999${response.body}");
+      // print("tttttt${jsonObject}");
+      // print("7070707070${jsonDecode(re)['message']['order_attribute']}");
       return jsonDecode(response.body)['message'];
     } else {
+      //  debugPrint("rrrrrr${token}");
+      // print("2233${jsonObject}");
+
+      //  print("989898989898${jsonDecode(response.body)['order_attribute']}");
+      // debugPrint("777777${response.body}");
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
     }
     notifyListeners();
@@ -991,8 +1009,11 @@ class UserAuthProvider extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
+      print("acceptok${response.body}");
       return jsonDecode(response.body)['message'];
     } else {
+      print("acceptrej${response.body}");
+
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
     }
     notifyListeners();

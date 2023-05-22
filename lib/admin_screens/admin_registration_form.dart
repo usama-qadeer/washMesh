@@ -165,22 +165,6 @@ class _AdminRegisterScreenState extends State<AdminRegisterScreen> {
   File? profileImg;
   dynamic convertedImage;
 
-  // profileImage() async {
-  //   final ImagePicker picker = ImagePicker();
-  //   final XFile? imageFile = await picker.pickImage(
-  //     source: ImageSource.gallery,
-  //     maxWidth: 300,
-  //   );
-  //   if (imageFile == null) {
-  //     return;
-  //   }
-  //   profileImg = File(imageFile.path);
-
-  //   final imageByte = profileImg!.readAsBytesSync();
-  //   setState(() {
-  //     convertedImage = "data:image/png;base64,${base64Encode(imageByte)}";
-  //   });
-  // }
   adminProfileImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? imageFile = await picker.pickImage(

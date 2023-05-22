@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:wash_mesh/user_screens/accepted_orders_screen.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
 import 'package:wash_mesh/widgets/custom_logo.dart';
@@ -24,15 +25,32 @@ class _UserOrdersScreenState extends State<UserOrdersScreen> {
           stream: UserAuthProvider.getOrders().asStream(),
           builder: (context, snapshot) {
             return !snapshot.hasData || snapshot.data!.data == null
-                ? const Center(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      'Place your order\nOr\n Wait for the process to complete',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.redAccent,
-                      ),
-                    ),
+                ? Center(
+                    heightFactor: 15.h,
+                    // child: Text(
+                    //   textAlign: TextAlign.center,
+                    //   'Place your order\nOr\n Wait for the process to complete',
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     color: Colors.redAccent,
+                    //   ),
+                    // ),
+
+                    child: Shimmer.fromColors(
+                        // direction: Duration(milliseconds: 200),
+                        child: Center(
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            'Processing...',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                        baseColor: Colors.redAccent,
+                        highlightColor: Colors.grey.shade300),
                   )
                 : snapshot.connectionState == ConnectionState.waiting
                     ? const Center(
@@ -49,7 +67,7 @@ class _UserOrdersScreenState extends State<UserOrdersScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'All User Orders',
+                                  'All Customer Orders',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 30.sp,
@@ -95,7 +113,7 @@ class _UserOrdersScreenState extends State<UserOrdersScreen> {
                                           ? const Text('Processing...')
                                           : const Text('Accepted'),
                                       subtitle: Text(
-                                        "Description : ${snapshot.data!.data!.elementAt(index).description}",
+                                        "\n${snapshot.data!.data!.elementAt(index).serviceAt ?? ""}\nDescription : ${snapshot.data!.data!.elementAt(index).description ?? ""}",
                                       ),
                                       trailing: status.toString() == '1'
                                           ? TextButton(
@@ -111,6 +129,9 @@ class _UserOrdersScreenState extends State<UserOrdersScreen> {
                                                     ),
                                                   ),
                                                 );
+                                                print("order1111${orderId}");
+                                                print(
+                                                    "order1111${orderAmount}");
                                               },
                                               child: Container(
                                                 padding:

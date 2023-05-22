@@ -42,6 +42,7 @@ class _WashBookScreenState extends State<WashBookScreen> {
   final List<int> _carnameid = [];
   final List<int> _attval = [];
   final List<String> rates = [];
+  String? selectedValue;
 
   String? catname;
   String? price;
@@ -50,7 +51,7 @@ class _WashBookScreenState extends State<WashBookScreen> {
   int _catid = 0;
   int _att_id = 0;
   int _att_val = 0;
-
+  String selectedVal = "Please Select";
   @override
   void initState() {
     // TODO: implement initState
@@ -127,8 +128,8 @@ class _WashBookScreenState extends State<WashBookScreen> {
     price = WashBookScreen.price;
     carname = _carname.first;
     UserAuthProvider.getMeshCategories();
-    print(
-        "fffffffffffffffffffff${WashBookScreen.data[0].catAttribute!.first.attribute!.rate}");
+    // print(
+    //     "fffffffffffffffffffff${WashBookScreen.data[0].catAttribute!.first.attribute!.rate}");
   }
 
   File? attachment;
@@ -173,11 +174,11 @@ class _WashBookScreenState extends State<WashBookScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "fffffffffffff${WashCategoryModel().data?.elementAt(1).catAttribute?.elementAt(1).attribute?.attributeValue}");
+    // print(
+    //     "fffffffffffff${WashCategoryModel().data?.elementAt(1).catAttribute?.elementAt(1).attribute?.attributeValue}");
 
     var totalAmount = int.parse(price!) + int.parse(attributeRate!);
-    print("hhhhhhh${attributeRate}");
+    // print("hhhhhhh${attributeRate}");
     return CustomBackground(
       op: 0.1,
       ch: SingleChildScrollView(
@@ -234,7 +235,8 @@ class _WashBookScreenState extends State<WashBookScreen> {
                   borderRadius: BorderRadius.circular(32.r),
                 ),
                 child: DropdownButtonFormField<String>(
-                  value: carname,
+                  value: selectedValue,
+                  hint: Text("Please Select a Service"),
                   // hint: const Text(
                   //   'Gender',
                   //   style: TextStyle(color: Colors.grey),
@@ -253,8 +255,12 @@ class _WashBookScreenState extends State<WashBookScreen> {
                       .toList(),
                   borderRadius: BorderRadius.circular(32.r),
                   onChanged: (String? value) {
+                    // print("qqq${_carname}");
+                    // print("qqq${value}");
                     _att_val = _carname.indexOf(value!);
+                    // print("qqq${_att_val}");
                     _att_id = _attval.elementAt(_att_val);
+                    // print("qqq${_att_id}");
                     _att_val = _carnameid.elementAt(_att_val);
                     setState(() {
                       attributeRate = rates.elementAt(_carname.indexOf(value));
@@ -466,6 +472,7 @@ class _WashBookScreenState extends State<WashBookScreen> {
                           ),
                           onPressed: () async {
                             List<OrderAttribute> lst = [];
+                            // print("qqqq${_att_id}");
                             OrderAttribute oa = OrderAttribute(
                               attributeId: _att_id,
                               attributeValue: _att_val,
@@ -476,7 +483,7 @@ class _WashBookScreenState extends State<WashBookScreen> {
                             String dt = DateTime.now().toString();
                             List<String> lstdt = dt.split(':');
                             dt = "${lstdt[0]}:${lstdt[1]}";
-                            PlaceOrderModel p = PlaceOrderModel(
+                            PlaceOrderModel p = await PlaceOrderModel(
                               amount: totalAmount.toString(),
                               description: desp.text.toString(),
                               picture: picList,
@@ -484,16 +491,24 @@ class _WashBookScreenState extends State<WashBookScreen> {
                               serviceAt: dt,
                               categoryId: _catid,
                             );
+
                             await Provider.of<UserAuthProvider>(context,
                                     listen: false)
                                 .placeOrder(p, context);
-
+                            print("nullcheckvalue${p.amount}");
+                            print("nullcheckvalue${p.categoryId}");
+                            print("nullcheckvalue${p.description}");
+                            print("nullcheckvalue${p.orderAttribute}");
+                            print("nullcheckvalue${p.picture}");
+                            print("nullcheckvalue${p.serviceAt}");
+                            //   print("nullcheckvalue${p.}");
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const UserOrdersScreen(),
                               ),
                             );
+                            //  print("ttttttttt${p}");   solved
                           },
                           child: const Text('Book Now'),
 

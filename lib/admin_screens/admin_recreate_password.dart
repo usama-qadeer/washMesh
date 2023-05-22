@@ -42,11 +42,11 @@ class _AdminRecreatePasswordState extends State<AdminRecreatePassword> {
         input: widget.input,
         newPassword: newPasswordC.text,
       );
-      print("ffffff**********************************f");
+      // print("ffffff**********************************f");
       newPasswordC.clear();
       Fluttertoast.showToast(msg: result);
     } catch (e) {
-      print("fffffff");
+      //  print("fffffff");
 
       return e.toString();
     }

@@ -46,9 +46,9 @@ class _WashCategoryState extends State<WashCategory> {
           child: FutureBuilder<um.WashCategoryModel>(
             future: UserAuthProvider.getWashCategories(),
             builder: (context, snapshot) {
-              print("oookkkk${um.WashCategoryModel().data}");
-              print(
-                  "pppppppp${snapshot.data?.data?.elementAt(1).catAttribute?.elementAt(1).attribute?.rate}");
+              // print("oookkkk${um.WashCategoryModel().data}");
+              // print(
+              //     "pppppppp${snapshot.data?.data?.elementAt(1).catAttribute?.elementAt(1).attribute?.rate}");
               return snapshot.connectionState == ConnectionState.waiting
                   ? const Padding(
                       padding: EdgeInsets.only(top: 320),
@@ -184,8 +184,8 @@ class _WashCategoryState extends State<WashCategory> {
                                           ),
                                         ),
                                       );
-                                      print(
-                                          "pppppppp${snapshot.data?.data?.elementAt(index).catAttribute?.elementAt(index).attribute?.rate}");
+                                      // print(
+                                      //     "pppppppp${snapshot.data?.data?.elementAt(index).catAttribute?.elementAt(index).attribute?.rate}");
                                     } else {
                                       Fluttertoast.showToast(
                                           msg: 'Something went wrong!!!');

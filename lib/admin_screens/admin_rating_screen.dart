@@ -7,17 +7,16 @@ import 'package:provider/provider.dart';
 import '../admin_screens/admin_single_order_detail.dart';
 import '../providers/admin_provider/admin_auth_provider.dart';
 
-class AdminExtraChargesDialog extends StatefulWidget {
+class AdminRatingScreen extends StatefulWidget {
   final String orderAmount;
 
-  const AdminExtraChargesDialog({super.key, required this.orderAmount});
+  const AdminRatingScreen({super.key, required this.orderAmount});
 
   @override
-  State<AdminExtraChargesDialog> createState() =>
-      _AdminExtraChargesDialogState();
+  State<AdminRatingScreen> createState() => _AdminRatingScreenState();
 }
 
-class _AdminExtraChargesDialogState extends State<AdminExtraChargesDialog> {
+class _AdminRatingScreenState extends State<AdminRatingScreen> {
   String? extraCharges;
   TextEditingController additionalChargesC = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -110,8 +109,6 @@ class _AdminExtraChargesDialogState extends State<AdminExtraChargesDialog> {
                         id: acceptedOrderId,
                         charges: extraCharges! + widget.orderAmount,
                       );
-                      debugPrint(
-                          "121212121 total amount with extra charges is  ${additionalChargesC.text + widget.orderAmount}");
 
                       Navigator.pop(context, 'done');
                     }

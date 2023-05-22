@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wash_mesh/Chating/chats.dart';
 import 'package:wash_mesh/providers/user_provider/user_info_provider.dart';
 import 'package:wash_mesh/widgets/custom_navigation_bar.dart';
 
@@ -538,7 +539,7 @@ class _MainScreenState extends State<MainScreen> {
       'apiVendorId': vendorId,
       'orderAmount': orderAmount,
     };
-
+    //print(userModel!.name);
     rideRef!.set(userInfoMap);
 
     tripRideRequestSubscription = rideRef!.onValue.listen((event) async {
@@ -577,7 +578,7 @@ class _MainScreenState extends State<MainScreen> {
         }
         if (rideRequestStatus == 'arrived') {
           setState(() {
-            driverStatus = 'Vendor has Arrived';
+            driverStatus = 'Service Provider has Arrived';
           });
         }
         if (rideRequestStatus == 'onTrip') {
@@ -587,7 +588,8 @@ class _MainScreenState extends State<MainScreen> {
           if ((event.snapshot.value as Map)['orderAmount'] != null) {
             double fareAmount = double.parse(
                 (event.snapshot.value as Map)['orderAmount'].toString());
-
+            String extraCharges =
+                (event.snapshot.value as Map)['extraCharges'].toString();
             String orderId =
                 (event.snapshot.value as Map)['orderId'].toString();
 
@@ -597,6 +599,7 @@ class _MainScreenState extends State<MainScreen> {
               builder: (context) => UserPayFareDialog(
                 fareAmount: fareAmount,
                 orderId: orderId,
+                extraCharges: extraCharges,
               ),
             );
             if (response == 'cashPaid') {
@@ -716,7 +719,7 @@ class _MainScreenState extends State<MainScreen> {
             if (event.snapshot.value == 'idle') {
               Fluttertoast.showToast(
                   msg:
-                      'The vendor has cancelled your request. Please order again');
+                      'The Service Provider has cancelled your request. Please order again');
               Future.delayed(
                 const Duration(seconds: 3),
                 () {
@@ -811,7 +814,9 @@ class _MainScreenState extends State<MainScreen> {
         Provider.of<UserAuthProvider>(context, listen: false);
 
     activeDriversCustomMarker();
+    bool visable = false;
 
+    startChat() {}
     return Scaffold(
       body: Stack(
         children: [
@@ -926,12 +931,24 @@ class _MainScreenState extends State<MainScreen> {
                               vendorId: widget.vendorId,
                               context: context,
                             );
+                            print("send Loc${widget.orderId}");
+                            print("send Loc${widget.vendorId}");
+                            print(
+                                "send Loc${userAuthProvider.userAcceptOrder()}");
                             saveRideRequest(
                               orderId: widget.orderId,
                               vendorId: widget.vendorId,
                               orderAmount: widget.orderAmount,
                             );
+                            // print("saverider${saveRideRequest(
+                            //   orderId: widget.orderId,
+                            //   vendorId: widget.vendorId,
+                            //   orderAmount: widget.orderAmount,
+                            // )}");
+                            // print(
+                            //     "888888${userAuthProvider.userAcceptOrder()}");
                           }
+                          // print("000099999${widget.orderAmount}");
                         },
                         child: const Text(
                             'Send your location to Service Provider'),
@@ -961,7 +978,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: AnimatedTextKit(
                     animatedTexts: [
                       FadeAnimatedText(
-                        'Waiting for vendor response',
+                        'Waiting For Service Provider Response',
                         duration: const Duration(seconds: 6),
                         textAlign: TextAlign.center,
                         textStyle: const TextStyle(
@@ -1033,11 +1050,24 @@ class _MainScreenState extends State<MainScreen> {
                         color: Colors.blue,
                       ),
                       const SizedBox(height: 30),
+                      Visibility(
+                        visible: visable,
+                        child: Text(
+                          driverPhone,
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                visable = true;
+                              });
+                            },
                             icon: const Icon(
                               Icons.phone_android,
                               color: Colors.white,
@@ -1052,7 +1082,10 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           ),
                           ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) => Chats()));
+                            },
                             icon: const Icon(
                               Icons.chat,
                               color: Colors.white,

@@ -37,9 +37,14 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
 
   onSubmit() async {
     setState(() {
-      isLoading == true;
+      isLoading = true;
     });
     final adminData = Provider.of<AdminAuthProvider>(context, listen: false);
+    AdminPushNotifications pushNotifications = AdminPushNotifications();
+
+    String token = await pushNotifications.getToken();
+    print("tukr $token");
+
     try {
       final isValid = formKey.currentState!.validate();
       if (isValid) {
@@ -47,7 +52,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
           context,
           input: phoneNo.text.trim(),
           password: password.text.trim(),
-          fcmToken: '',
+          fcmToken: token,
         );
 
         bool check = await login();
@@ -99,12 +104,12 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
             (route) => false,
           );
           setState(() {});
-          isLoading == false;
+          isLoading = false;
         } else if (result["message"] ==
                 'Service Provider Logged in Successfully!' &&
             result["status"] == "2") {
           setState(() {});
-          isLoading == false;
+          isLoading = false;
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -123,7 +128,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
       return e.toString();
     }
     setState(() {
-      isLoading == false;
+      isLoading = false;
     });
   }
 
@@ -131,7 +136,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var email = prefs.getString("email");
-      print(email);
+      // print(email);
 
       final UserCredential admin =
           await firebaseAuth.signInWithEmailAndPassword(
@@ -150,7 +155,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
           } else {
             Fluttertoast.showToast(msg: 'No record exist with this email.');
             setState(() {
-              isLoading == true;
+              isLoading = false;
             });
           }
         });
@@ -159,7 +164,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
       } else {
         Fluttertoast.showToast(msg: 'Login Failed, Check your credentials.');
         setState(() {
-          isLoading == false;
+          isLoading = false;
         });
         return false;
       }
@@ -167,7 +172,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
       print(e);
       //  Fluttertoast.showToast(msg: e.toString());
       setState(() {
-        isLoading == false;
+        isLoading = false;
       });
       return false;
     }
@@ -267,7 +272,7 @@ class _AdminLoginFormState extends State<AdminLoginForm> {
                               borderRadius: BorderRadius.circular(10.r)),
                           child: Center(
                             child: Text(
-                              'Forget Password?',
+                              '',
                               style: TextStyle(
                                   fontSize: 15.sp, color: Colors.blue),
                             ),

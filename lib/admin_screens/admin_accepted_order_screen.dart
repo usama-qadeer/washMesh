@@ -27,31 +27,34 @@ class _AdminAcceptedOrderScreenState extends State<AdminAcceptedOrderScreen> {
             future: AdminAuthProvider.getAcceptedBookings(),
             builder: (context, snapshot) {
               return !snapshot.hasData || snapshot.data!.data!.data!.isEmpty
-                  ? Center(
-                      heightFactor: 17.h,
-                      // child: const Text(
-                      //   textAlign: TextAlign.center,
-                      //   'No bookings available\n Or\n wait for the process...',
-                      //   style: TextStyle(
-                      //     fontSize: 20,
-                      //     color: Colors.redAccent,
-                      //   ),
-                      // ),
-                      child: Shimmer.fromColors(
-                          // direction: Duration(milliseconds: 200),
-                          child: Center(
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              'Processing...',
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.redAccent,
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: Center(
+                        heightFactor: 15.h,
+                        // child: const Text(
+                        //   textAlign: TextAlign.center,
+                        //   'No bookings available\n Or\n wait for the process...',
+                        //   style: TextStyle(
+                        //     fontSize: 20,
+                        //     color: Colors.redAccent,
+                        //   ),
+                        // ),
+                        child: Shimmer.fromColors(
+                            // direction: Duration(milliseconds: 200),
+                            child: Center(
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                'Processing...',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.redAccent,
+                                ),
                               ),
                             ),
-                          ),
-                          baseColor: Colors.redAccent,
-                          highlightColor: Colors.grey.shade300),
+                            baseColor: Colors.redAccent,
+                            highlightColor: Colors.grey.shade300),
+                      ),
                     )
                   : snapshot.connectionState == ConnectionState.waiting
                       ? const Padding(
@@ -103,47 +106,57 @@ class _AdminAcceptedOrderScreenState extends State<AdminAcceptedOrderScreen> {
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(12),
+                                        //    scrollDirection: Axis.horizontal,
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              const Text("Amount :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).amount}",
-                                              ),
-                                              SizedBox(width: 5.h),
-                                              const Text("| Extra Charges :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).extraCharges}",
-                                              ),
-                                              SizedBox(width: 5.h),
-                                              const Text("| Total :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).total}",
-                                              ),
-                                            ],
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                const Text("Amount :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).amount}",
+                                                ),
+                                                SizedBox(width: 5.h),
+                                                const Text("| Extra Charges :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).extraCharges}",
+                                                ),
+                                                SizedBox(width: 5.h),
+                                                const Text("| Total :"),
+                                                SizedBox(width: 5.h),
+                                                Text(
+                                                  "${snapshot.data!.data!.data!.elementAt(index).total}",
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                           SizedBox(height: 5.h),
-                                          Row(
-                                            children: [
-                                              const Text("Description :"),
-                                              SizedBox(width: 5.h),
-                                              Text(
-                                                "${snapshot.data!.data!.data!.elementAt(index).description}",
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  const Text("Description :"),
+                                                  SizedBox(width: 5.h),
+                                                  Text(
+                                                    "${snapshot.data!.data!.data!.elementAt(index).description}",
+                                                  ),
+                                                  SizedBox(width: 5.h),
+                                                  const Text("| Status :"),
+                                                  SizedBox(width: 5.h),
+                                                  status == '1'
+                                                      ? const Text('')
+                                                      : const Text('Accepted'),
+                                                ],
                                               ),
-                                              SizedBox(width: 5.h),
-                                              const Text("| Status :"),
-                                              SizedBox(width: 5.h),
-                                              status == '1'
-                                                  ? const Text('')
-                                                  : const Text('Accepted'),
-                                            ],
+                                            ),
                                           ),
                                           SizedBox(height: 5.h),
                                           Row(

@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wash_mesh/admin_screens/admin_login_form.dart';
 import 'package:wash_mesh/admin_screens/admin_registration_form.dart';
+import 'package:wash_mesh/global_variables/global_variables.dart';
 import 'package:wash_mesh/models/admin_models/order_detail_model.dart';
 import 'package:wash_mesh/models/admin_models/vendor_applied.dart';
 import 'package:wash_mesh/models/admin_models/vendor_orders.dart';
@@ -22,7 +24,7 @@ import '../../models/admin_models/admin_model.dart';
 
 class AdminAuthProvider extends ChangeNotifier {
   static const baseURL = 'https://washmesh.stackbuffers.com/api';
-
+  static String? verify = "";
 // Admin Authentication Code:
 
   registerAdmin(Vendor adminData, context) async {
@@ -71,11 +73,19 @@ class AdminAuthProvider extends ChangeNotifier {
         phone: adminData.phone,
       );
 
+      print("adminData.phone");
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: "+${adminData.phone}",
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {},
+        verificationCompleted: (PhoneAuthCredential credential) {
+          // Fluttertoast.showToast(msg: "completed ${credential.toString()}");
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          // print("oookkkkkkkk");
+          //  Fluttertoast.showToast(msg: "Failed ${e.toString()}");
+        },
         codeSent: (String verificationId, int? resendToken) {
+          Fluttertoast.showToast(msg: "OTP SENT successfully".toUpperCase());
+
           AdminSendOTP.verify = verificationId;
           Navigator.pushReplacement(
               context,
@@ -88,10 +98,12 @@ class AdminAuthProvider extends ChangeNotifier {
                 ),
               ));
         },
-        codeAutoRetrievalTimeout: (String verificationId) {},
+        codeAutoRetrievalTimeout: (String verificationId) {
+          //  Fluttertoast.showToast(msg: "timeout $verificationId");
+        },
       );
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setString("adminPhone", adminData.phone);
+      preferences.setString("adminPhone", "+${adminData.phone}");
       Fluttertoast.showToast(msg: result);
 
       // Navigator.of(context).pushReplacement(
@@ -172,7 +184,7 @@ class AdminAuthProvider extends ChangeNotifier {
     var fcmToken,
   }) async {
     final url = Uri.parse(
-        '$baseURL/user/vendor/login?input=$input&password=$password&fcm_token=$fcmToken');
+        '$baseURL/user/vendor/login?input=$input&password=$password&fcm_token="$fcmToken');
     final response = await http.post(url);
     if (response.statusCode == 200) {
       if (jsonDecode(response.body)['message'] ==
@@ -183,27 +195,25 @@ class AdminAuthProvider extends ChangeNotifier {
         prefs.setString('email',
             jsonDecode(response.body)['data']['Vendor']['email'].toString());
 
-        print("pkpk ${jsonDecode(response.body)['data']['Vendor']['status']}");
-
         prefs.setString('adminPersonalInfo', response.body);
       }
-      print("rrrrrrrr ${response.body}");
-      print("ssssss${jsonDecode(response.body)['message']}");
-      print(fcmToken);
+
+      print(
+          "usama2222 ${jsonDecode(response.body)['data']['Vendor']['fcm_token']}");
       return {
         "message": jsonDecode(response.body)['message'],
-        "status": "${jsonDecode(response.body)['data']['Vendor']['status']}"
+        "status": "${jsonDecode(response.body)['data']['Vendor']['status']}",
       };
     } else {
-      print(fcmToken);
-      print("eeeeeeeeeee ${response.body}");
+      //print("12121212${fcmToken}");
+      //print("eeeeeeeeeee ${response.body}");
+      // print(
+      //  "9090909090${jsonDecode(response.body)['data']['Vendor']['fcm_token']}");
     }
     notifyListeners();
   }
 
   updateAdminPassword({var newPassword, var ntoken}) async {
-    // SharedPreferences pref = await SharedPreferences.getInstance();
-    // var token = pref.getString('token');
     var url =
         Uri.parse('$baseURL/user/vendor/update/password?password=$newPassword');
     var response = await http.post(
@@ -227,7 +237,7 @@ class AdminAuthProvider extends ChangeNotifier {
     var input,
     var newPassword,
   }) async {
-    print("hhhhhh${input}");
+    // print("hhhhhh${input}");
     SharedPreferences pref = await SharedPreferences.getInstance();
     var token = pref.getString('token');
     var url = Uri.parse(
@@ -248,6 +258,7 @@ class AdminAuthProvider extends ChangeNotifier {
       // print("llllllllllll${response.body}");
       var decode = jsonDecode(response.body)['data'];
       print("00000 ${decode['token']}");
+      print("kkkkkkkkkkkkkkk${FirebaseAuth.instance.currentUser!.uid}");
 
       updateAdminPassword(
         newPassword: newPassword,
@@ -260,16 +271,17 @@ class AdminAuthProvider extends ChangeNotifier {
           ));
       // FirebaseAuth.instance.currentUser!.updatePassword(newPassword);
       // print("rrrrrrrrrrrrr ${response.statusCode}");
-      FirebaseAuth auth = FirebaseAuth.instance;
+      // FirebaseAuth auth = FirebaseAuth.instance;
 
       String upPassword = newPassword;
-      print("lllllll${upPassword}");
-      await auth.currentUser!.updatePassword(upPassword);
-
+      //  print("lllllll${upPassword}");
+      await FirebaseAuth.instance.currentUser!
+          .updatePassword(upPassword)
+          .then((v) => Fluttertoast.showToast(msg: "ffffffffff $upPassword"));
 
       return jsonDecode(response.body)['message'];
     } else {
-      print("hhhhh ${response.statusCode}");
+      // print("hhhhh ${response.statusCode}");
       return 'Registration Failed';
     }
   }
@@ -393,7 +405,7 @@ class AdminAuthProvider extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
-
+      debugPrint("okokokokokokoko${response.body}");
       return jsonDecode(response.body)['message'];
     } else {
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
@@ -416,9 +428,15 @@ class AdminAuthProvider extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
+      debugPrint("88888${response.body}");
+      debugPrint("myid${id}");
 
       return jsonDecode(response.body)['message'];
-    } else {
+    }
+    // else if(response.statusCode == 200 && ){}
+    else {
+      debugPrint("808080808${response.body}");
+
       Fluttertoast.showToast(msg: jsonDecode(response.body)['message']);
     }
     notifyListeners();

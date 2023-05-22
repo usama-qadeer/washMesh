@@ -32,7 +32,7 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
             builder: (context, snapshot) {
               return !snapshot.hasData || snapshot.data!.data!.isEmpty
                   ? Center(
-                      heightFactor: 17.h,
+                      heightFactor: 15.h,
                       // child: const Text(
                       //   textAlign: TextAlign.center,
                       //   'No orders available\n Or\n wait for the process...',
@@ -75,7 +75,7 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'All Vendor Orders',
+                                    'Service Provider Order',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 30.sp,
@@ -115,7 +115,7 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
                                           ? const Text('Pending')
                                           : const Text(''),
                                       subtitle: Text(
-                                        "Description : ${snapshot.data!.data!.elementAt(index).description}",
+                                        "${snapshot.data!.data!.elementAt(index).serviceAt}\nDescription : ${snapshot.data!.data!.elementAt(index).description}",
                                       ),
                                       trailing: Column(
                                         crossAxisAlignment:
@@ -123,7 +123,8 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
                                         children: [
                                           InkWell(
                                             onTap: () async {
-                                              var id = snapshot.data!.data!
+                                              var id = await snapshot
+                                                  .data!.data!
                                                   .elementAt(index)
                                                   .id;
                                               await vendorAuthProvider
@@ -137,6 +138,14 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
                                                 ),
                                                 (route) => false,
                                               );
+                                              if (snapshot.data!.status == 2) {
+                                                snapshot.data!.data!
+                                                    .removeAt(index)
+                                                    .id;
+
+                                                // print(
+                                                //     "pppppp${snapshot.data!.message!.length}");
+                                              }
                                             },
                                             child: const Text(
                                               'Reject',
@@ -153,7 +162,7 @@ class _AdminOrdersScreenState extends State<AdminOrdersScreen> {
                                               await vendorAuthProvider
                                                   .vendorAcceptOrder(
                                                       id: id, context: context);
-
+                                              print("vendor id${id}");
                                               Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(

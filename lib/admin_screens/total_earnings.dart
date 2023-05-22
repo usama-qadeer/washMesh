@@ -25,7 +25,7 @@ class _TotalEarningsScreenState extends State<TotalEarningsScreen> {
             builder: (context, snapshot) {
               return !snapshot.hasData || snapshot.data!.data!.data!.isEmpty
                   ? Center(
-                      heightFactor: 16.h,
+                      heightFactor: 15.h,
                       // child: const Text(
                       //   textAlign: TextAlign.center,
                       //   'Processing',

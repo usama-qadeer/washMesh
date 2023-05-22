@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wash_mesh/admin_map_integration/assistants/admin_assistant_methods.dart';
+import 'package:wash_mesh/widgets/admin_extra_charges_dialog.dart';
 
 import '../../admin_screens/admin_new_trip_screen.dart';
 import '../admin_global_variables/admin_global_variables.dart';
@@ -62,6 +63,7 @@ class _AdminNotificationDialogBoxState
 
   @override
   Widget build(BuildContext context) {
+    //debugPrint("aaaaaaaa${AdminRideRequestModel()}");
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
@@ -162,6 +164,7 @@ class _AdminNotificationDialogBoxState
                     assetsAudioPlayer.stop();
                     assetsAudioPlayer = AssetsAudioPlayer();
                     acceptRideRequest(context);
+                    // Navigator.pop(context);
                   },
                   child: const Text('Accept'),
                 ),

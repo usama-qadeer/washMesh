@@ -34,8 +34,8 @@ class UserAssistantMethods {
     return readableAddress;
   }
 
-  static void readCurrentOnlineUserInfo() async {
-    DatabaseReference userRef = FirebaseDatabase.instance
+  static readCurrentOnlineUserInfo() async {
+    DatabaseReference userRef = await FirebaseDatabase.instance
         .ref()
         .child('users')
         .child(firebaseAuth.currentUser!.uid);

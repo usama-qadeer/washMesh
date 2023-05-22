@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:wash_mesh/admin_screens/admin_single_order_detail.dart';
 import 'package:wash_mesh/models/user_models/vendor_accepted_order.dart';
 import 'package:wash_mesh/user_map_integration/screens/main_screen.dart';
 import 'package:wash_mesh/widgets/custom_background.dart';
@@ -38,6 +39,7 @@ class _AcceptedOrdersScreenState extends State<AcceptedOrdersScreen> {
           builder: (context, snapshot) {
             return snapshot.hasData && snapshot.data!.data == null
                 ? Center(
+                    heightFactor: 15.h,
                     // child: Text(
                     //   textAlign: TextAlign.center,
                     //   'Processing please wait...',
@@ -94,6 +96,7 @@ class _AcceptedOrdersScreenState extends State<AcceptedOrdersScreen> {
                                   var status = snapshot.data!.status;
 
                                   return Container(
+                                    //  height: 100.h,
                                     margin: const EdgeInsets.only(bottom: 6),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -101,31 +104,48 @@ class _AcceptedOrdersScreenState extends State<AcceptedOrdersScreen> {
                                     ),
                                     child: ListTile(
                                       minVerticalPadding: 10,
-                                      leading: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text('Status:'),
-                                          status == 2
-                                              ? const Text('Accepted')
-                                              : const Text(''),
-                                        ],
+                                      leading: SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text('Status:'),
+                                            status == 2
+                                                ? const Text('Accepted')
+                                                : const Text(''),
+                                          ],
+                                        ),
                                       ),
-                                      title: const Text('Vendor Name: '),
-                                      subtitle: Text(
-                                        '${snapshot.data!.data!.elementAt(index).vendors!.user!.userName}',
+                                      title: const Text('Provider Name: '),
+                                      subtitle: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Text(
+                                              ' ${snapshot.data!.data!.elementAt(index).vendors!.user!.userName}',
+                                            ),
+                                          ),
+                                          // Text("Description"),
+                                          // Text(
+                                          //   ' ${snapshot.data!.data!.elementAt(index)}',
+                                          // ),
+                                        ],
                                       ),
                                       trailing: TextButton(
                                         onPressed: () async {
-                                          var vendorId = snapshot.data!.data!
+                                          var vendorId = await snapshot
+                                              .data!.data!
                                               .elementAt(index)
                                               .vendorId;
-                                          var orderId = snapshot.data!.data!
+                                          var orderId = await snapshot
+                                              .data!.data!
                                               .elementAt(index)
                                               .orderId;
-
+                                          print("vendorId${vendorId}");
+                                          print("OrderId${orderId}");
                                           // await userAuthProvider
                                           //     .userAcceptOrder(
                                           //   orderId: orderId,
@@ -142,6 +162,10 @@ class _AcceptedOrdersScreenState extends State<AcceptedOrdersScreen> {
                                               ),
                                             ),
                                           );
+                                          print("88888888${orderId}");
+                                          print("88888888${vendorId}");
+                                          print(
+                                              "88888888${widget.acceptedOrderAmount}");
                                         },
                                         child: const Text(
                                           'Confirm',

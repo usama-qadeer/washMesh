@@ -76,6 +76,11 @@ class AdminPushNotifications {
     });
   }
 
+  Future<String> getToken() async {
+    String? token = await messaging.getToken();
+    return token!;
+  }
+
   Future generateToken() async {
     final fcmToken = await messaging.getToken();
 

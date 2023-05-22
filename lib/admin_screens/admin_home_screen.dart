@@ -104,6 +104,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
     await AdminAssistantMethods.reverseGeocoding(
         driverCurrentPosition!, context);
+
     setState(() {
       isLoading = false;
     });
@@ -175,12 +176,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   readDriverInfo() async {
-    currentAdminUser = FirebaseAuth.instance.currentUser;
+    currentAdminUser = await FirebaseAuth.instance.currentUser;
 
-    FirebaseDatabase.instance
+    await FirebaseDatabase.instance
         .ref()
         .child('vendor')
-        .child(currentAdminUser!.uid)
+        .child(FirebaseAuth.instance.currentUser!.uid)
         .once()
         .then((driverData) {
       if (driverData.snapshot.value != null) {
@@ -199,14 +200,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
     super.initState();
+    GoogleMap(initialCameraPosition: _kGooglePlex);
+    debugPrint(
+        "gggggggggg${FirebaseAuth.instance.currentUser!.uid == null ? 12344 : FirebaseAuth.instance.currentUser!.uid}");
+
     readDriverInfo();
     allowLocationPermission();
   }
 
   @override
   void dispose() {
+    // streamSubscription!.cancel();
     super.dispose();
-    streamSubscription!.cancel();
   }
 
   @override
@@ -221,6 +226,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         child: FutureBuilder<AdminModel>(
           future: adminData.getAdminData(),
           builder: (context, snapshot) {
+            // print(
+            //     "llllllll ${snapshot.data!.data!.vendor!.firstName.toString().toCapitalized()}");
             return !snapshot.hasData && snapshot.data == null
                 ? Center(
                     // child: Text(

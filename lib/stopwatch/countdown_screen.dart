@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CountDownScreen extends StatefulWidget {
-  const CountDownScreen({Key? key}) : super(key: key);
-
   @override
+  const CountDownScreen({Key? key}) : super(key: key);
   State<CountDownScreen> createState() => _CountDownScreenState();
+  // final String orderAmount
 }
 
 class _CountDownScreenState extends State<CountDownScreen> {
@@ -87,8 +87,16 @@ class _CountDownScreenState extends State<CountDownScreen> {
                 onPressed: () {
                   stopTimer();
                   Navigator.pop(context, 'working');
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => AdminExtraChargesDialog(
+                  //         //Order Amount changes by usama
+                  //         orderAmount: '99',
+                  //       ),
+                  //     ));
                 },
-                child: const Text('CANCEL'),
+                child: const Text('Finish'),
               ),
             ],
           )

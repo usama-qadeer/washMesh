@@ -18,7 +18,7 @@ class PlaceOrderModel {
     categoryId = json['category_id'];
     amount = json['amount'];
     serviceAt = json['service_at'];
-    description = json['description'];
+    description = json['description'] ?? "".toString();
     if (json['order_attribute'] != null) {
       orderAttribute = <OrderAttribute>[];
       json['order_attribute'].forEach((v) {

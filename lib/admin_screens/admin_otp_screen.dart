@@ -55,7 +55,7 @@ class _OtpScreenState extends State<AdminOtpScreen> {
   resendOTP() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var adminPhone = preferences.getString("adminPhone");
-
+    // print("jjjjj ${adminPhone}");
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: "+${adminPhone}",
       verificationCompleted: (PhoneAuthCredential credential) {},

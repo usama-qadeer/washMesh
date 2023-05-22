@@ -237,49 +237,66 @@ class _UserRegistrationFormState extends State<UserRegistrationForm> {
                           return null;
                         },
                       ),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(width: 5.w),
-                              Expanded(
-                                flex: 5,
-                                child: TextFormField(
-                                  controller: viaPhone,
-                                  maxLength: 12,
-                                  keyboardType: TextInputType.phone,
-                                  decoration: InputDecoration(
-                                    suffixIcon: const Icon(
-                                      Icons.star,
-                                      size: 20,
-                                    ),
-                                    hintText: '923121234567',
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20.r),
-                                      borderSide:
-                                          const BorderSide(color: Colors.white),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.white),
-                                      borderRadius: BorderRadius.circular(20.r),
-                                    ),
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                  ),
-                                  validator: (value) {
-                                    if (value!.isEmpty && value.length < 12) {
-                                      return 'Please enter your valid phone number';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10.h),
-                        ],
+                      CustomTextField(
+                        hint: 'phoneNo'.tr(),
+                        keyboardType: TextInputType.phone,
+                        maxLength: 12,
+                        suffixIcon: const Icon(
+                          Icons.star,
+                          size: 20,
+                        ),
+                        controller: viaPhone,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your phone number';
+                          }
+                          return null;
+                        },
                       ),
+
+                      // Column(
+                      //   children: [
+                      //     Row(
+                      //       children: [
+                      //         SizedBox(width: 5.w),
+                      //         Expanded(
+                      //           flex: 5,
+                      //           child: TextFormField(
+                      //             controller: viaPhone,
+                      //             maxLength: 12,
+                      //             keyboardType: TextInputType.phone,
+                      //             decoration: InputDecoration(
+                      //               suffixIcon: const Icon(
+                      //                 Icons.star,
+                      //                 size: 20,
+                      //               ),
+                      //               hintText: '923121234567',
+                      //               enabledBorder: OutlineInputBorder(
+                      //                 borderRadius: BorderRadius.circular(20.r),
+                      //                 borderSide:
+                      //                     const BorderSide(color: Colors.white),
+                      //               ),
+                      //               focusedBorder: OutlineInputBorder(
+                      //                 borderSide:
+                      //                     const BorderSide(color: Colors.white),
+                      //                 borderRadius: BorderRadius.circular(20.r),
+                      //               ),
+                      //               fillColor: Colors.white,
+                      //               filled: true,
+                      //             ),
+                      //             validator: (value) {
+                      //               if (value!.isEmpty && value.length < 12) {
+                      //                 return 'Please enter your valid phone number';
+                      //               }
+                      //               return null;
+                      //             },
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     SizedBox(height: 10.h),
+                      //   ],
+                      // ),
                       CustomTextField(
                         hint: 'password'.tr(),
                         suffixIcon: const Icon(
